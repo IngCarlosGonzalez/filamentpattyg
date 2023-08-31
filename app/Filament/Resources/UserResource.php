@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
+use App\Models\Equipo;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
@@ -76,15 +77,12 @@ class UserResource extends Resource
                                 '2' => 'Con Equipo',
                             ])
                             ->required(),
-                        Select::make('equipo')
+                        Select::make('equipo_id')
                             ->label('Asignar Equipo')
-                            ->options([
-                                '1' => 'Sin Equipo',
-                                '2' => 'Equipo de Patty',
-                                '3' => 'Equipo de Prueba',
-                            ])
+                            ->options(Equipo::all()->pluck('name', 'id'))
                             ->required(),
                         Select::make('roles')
+                            ->label('Asignar el Rol')
                             ->relationship('roles', 'name'),
                 ])
             ]);
@@ -95,10 +93,11 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('name')->sortable()->searchable(),
-                TextColumn::make('querol')->sortable(),
-                TextColumn::make('equipo')->sortable(),
+                TextColumn::make('name')->sortable()->searchable()->label('Nombre'),
+                TextColumn::make('querol')->sortable()->label('Tipo'),
+                TextColumn::make('equipo_id')->sortable()->label('Equipo'),
                 TextColumn::make('created_at')
+                    ->label('Creado')
                     ->sortable()
                     ->dateTime('d-m-Y h:i A'),
             ])
